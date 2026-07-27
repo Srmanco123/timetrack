@@ -1,25 +1,5 @@
 {
-  "projects": [
-    {
-      "id": "c37a31ba-dc04-484c-818b-6dbcb22f2364",
-      "name": "OR Correciones",
-      "category": "Planning Reports",
-      "priority": 1,
-      "estimatedHours": 3,
-      "hoursPerDay": 3,
-      "startDate": "2026-07-27",
-      "deadline": "2026-07-27",
-      "color": "#F0883E",
-      "workDays": [
-        1,
-        2,
-        3,
-        4,
-        5
-      ],
-      "status": "active"
-    }
-  ],
+  "projects": [],
   "tasks": [],
   "sessions": []
 }
