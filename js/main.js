@@ -20,6 +20,8 @@ function render() {
     state.timerInterval = null;
   }
 
+  normalizeSelections();
+
   app.innerHTML = renderHeader() + renderView();
 
   // Restart timer interval if running and on register tab
@@ -33,6 +35,26 @@ function render() {
         el.className   = 'timer-display running';
       }
     }, 1000);
+  }
+}
+
+/** Keeps project/task selections valid: defaults to the first visible project
+ *  and its first active task whenever the current selection is missing. */
+function normalizeSelections() {
+  const visible = state.projects
+    .filter(p => p.status !== 'hidden')
+    .sort((a, b) => a.priority - b.priority);
+
+  if (!visible.some(p => p.id === state.selectedProjectId)) {
+    state.selectedProjectId = visible[0]?.id ?? null;
+    state.selectedTaskId    = null;
+  }
+
+  const activeTasks = state.tasks.filter(
+    t => t.projectId === state.selectedProjectId && t.status === 'active'
+  );
+  if (!activeTasks.some(t => t.id === state.selectedTaskId)) {
+    state.selectedTaskId = activeTasks[0]?.id ?? null;
   }
 }
 
@@ -168,6 +190,11 @@ function handleAction(action, params = {}) {
       break;
     }
 
+    // Task selection change
+    case 'select-task':
+      state.selectedTaskId = params.value ?? document.getElementById('select-task')?.value ?? null;
+      break;
+
     // Projects tab — filters
     case 'toggle-show-done':
       state.showDone = !state.showDone;
@@ -207,6 +234,8 @@ function handleAction(action, params = {}) {
       // Auto-expand so user can add tasks immediately
       const newP = state.projects[state.projects.length - 1];
       state.expandedProjects.add(newP.id);
+      state.selectedProjectId = newP.id;
+      state.selectedTaskId    = null;
       state.creatingProject = false;
       state.newProjectColor = '#F0883E';
       autoSave();
