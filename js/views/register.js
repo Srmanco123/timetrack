@@ -77,9 +77,14 @@ function renderTimerCard() {
         </div>
         <div class="field">
           <label class="field-label">Tarea</label>
-          <select class="field-input" id="select-task">
+          <select class="field-input" id="select-task" data-action="select-task">
             ${taskOptions}
           </select>
+          ${!activeTasks.length ? `<span style="font-size:10px;color:var(--warning);margin-top:4px">
+            ${state.projects.length
+              ? 'Este proyecto no tiene tareas activas — créala en la pestaña Proyectos'
+              : 'Crea primero un proyecto en la pestaña Proyectos'}
+          </span>` : ''}
         </div>
         <div class="field">
           <label class="field-label">Notas</label>
